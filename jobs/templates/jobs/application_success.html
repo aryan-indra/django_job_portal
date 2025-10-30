@@ -1,0 +1,12 @@
+{% extends 'jobs/base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12 text-center">
+    <i class="fas fa-check-circle text-green-500 text-6xl mb-4"></i>
+    <h1 class="text-3xl font-bold mb-4">Application Submitted!</h1>
+    <p class="text-gray-600 mb-8">Your application for {{ application.job.title }} has been sent successfully.</p>
+    <div class="flex gap-4 justify-center">
+        <a href="{% url 'job_list' %}" class="btn-primary text-white px-6 py-3 rounded-lg">Browse More Jobs</a>
+        <a href="{% url 'my_applications' %}" class="bg-gray-200 px-6 py-3 rounded-lg">View My Applications</a>
+    </div>
+</div>
+{% endblock %}

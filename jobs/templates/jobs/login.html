@@ -1,0 +1,113 @@
+<!-- login.html -->
+{% extends 'jobs/base.html' %}
+
+{% block title %}Login - Job Portal{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 animate-fade-in">
+        <div>
+            <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mx-auto">
+                <i class="fas fa-sign-in-alt text-white text-2xl"></i>
+            </div>
+            <h2 class="mt-6 text-center text-4xl font-bold text-gray-900">
+                Welcome back
+            </h2>
+            <p class="mt-2 text-center text-gray-600">
+                Sign in to continue your job search
+            </p>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            {% if form.errors %}
+                <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <div class="flex">
+                        <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
+                        <div>
+                            <p class="text-sm text-red-700">
+                                {% if form.non_field_errors %}
+                                    {{ form.non_field_errors.0 }}
+                                {% else %}
+                                    Please correct the errors below.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Username -->
+                <div>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Username
+                    </label>
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-4 top-4 text-gray-400"></i>
+                        <input type="text" name="username" required 
+                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="Enter your username">
+                    </div>
+                    {% if form.username.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Password -->
+                <div>
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-4 top-4 text-gray-400"></i>
+                        <input type="password" name="password" required
+                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="Enter your password">
+                    </div>
+                    {% if form.password.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" name="remember" 
+                               class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="text-sm text-purple-600 hover:text-purple-800 transition">
+                        Forgot password?
+                    </a>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold text-lg">
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Don't have an account?</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <a href="{% url 'register' %}" class="text-purple-600 font-medium hover:text-purple-800 transition">
+                        Create a new account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

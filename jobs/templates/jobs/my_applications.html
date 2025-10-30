@@ -1,0 +1,17 @@
+{% extends 'jobs/base.html' %}
+{% block title %}My Applications{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-6">My Applications</h1>
+    <div class="grid gap-6">
+        {% for app in applications %}
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-xl font-bold">{{ app.job.title }}</h3>
+            <p>{{ app.job.company_name }}</p>
+            <p>Status: {{ app.get_status_display }}</p>
+            <p class="text-sm text-gray-500">Applied: {{ app.submitted_at|date:"M d, Y" }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
