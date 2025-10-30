@@ -1,6 +1,6 @@
 {% extends 'jobs/base.html' %}
 
-{% block title %}Dashboard - Job Portal{% endblock %}
+{% block title %}Dashboard - HustleHive{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -167,7 +167,56 @@
         
         {% else %}
         <!-- ========================= CANDIDATE DASHBOARD ========================= -->
-        {% include 'jobs/dashboard.html' %}
+        <div class="animate-fade-in">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow p-6">
+                    <p class="text-sm text-gray-500">Total Applications</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ total_applications|default:0 }}</p>
+                </div>
+                <div class="bg-white rounded-xl shadow p-6">
+                    <p class="text-sm text-gray-500">Pending</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ pending|default:0 }}</p>
+                </div>
+                <div class="bg-white rounded-xl shadow p-6">
+                    <p class="text-sm text-gray-500">Reviewed</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ reviewed|default:0 }}</p>
+                </div>
+                <div class="bg-white rounded-xl shadow p-6">
+                    <p class="text-sm text-gray-500">Accepted</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ accepted|default:0 }}</p>
+                </div>
+            </div>
+
+            <!-- Recent Applications -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">Recent Applications</h3>
+                {% if recent_applications %}
+                <div class="divide-y">
+                    {% for app in recent_applications %}
+                    <div class="py-4 flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-gray-900">{{ app.job.title }}</p>
+                            <p class="text-sm text-gray-600">{{ app.job.company_name }} • {{ app.job.location }}</p>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full 
+                                {% if app.status == 'P' %}bg-yellow-100 text-yellow-800{% elif app.status == 'R' %}bg-blue-100 text-blue-800{% elif app.status == 'A' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                {% if app.status == 'P' %}Pending{% elif app.status == 'R' %}Reviewed{% elif app.status == 'A' %}Accepted{% else %}Declined{% endif %}
+                            </span>
+                        </div>
+                        <a href="{% url 'job_detail' app.job.id %}" class="text-purple-600 hover:text-purple-800 font-medium">View</a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-10 text-gray-500">
+                    <i class="fas fa-file-alt text-4xl mb-3"></i>
+                    <p>No recent applications yet.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
         {% endif %}
     </div>
 </div>

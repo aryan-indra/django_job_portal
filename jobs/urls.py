@@ -27,6 +27,7 @@ urlpatterns = [
     path('my-applications/', views.my_applications, name='my_applications'),
     path('my-jobs/', views.my_jobs, name='my_jobs'),
     path('jobs/<int:job_id>/applications/', views.job_applications, name='job_applications'),
+    path('jobs/<int:job_id>/applications/<int:application_id>/<str:action>/', views.update_application_status, name='update_application_status'),
     
     # Profile & Dashboard
     path('profile/', views.profile, name='profile'),

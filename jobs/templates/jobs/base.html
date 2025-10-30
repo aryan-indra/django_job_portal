@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Job Portal{% endblock %}</title>
+    <title>{% block title %}HustleHive{% endblock %}</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -65,7 +65,7 @@
                             <i class="fas fa-briefcase text-white text-xl"></i>
                         </div>
                         <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                            JobPortal
+                            HustleHive
                         </span>
                     </a>
                 </div>
@@ -93,19 +93,22 @@
                             </a>
                         {% endif %}
                         
-                        <div class="relative group">
-                            <button class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 font-medium transition">
+                        <div class="relative">
+                            <button id="user-menu-btn" class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 font-medium transition">
                                 <i class="fas fa-user-circle text-2xl"></i>
                                 <span>{{ user.username }}</span>
                                 <i class="fas fa-chevron-down text-xs"></i>
                             </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block">
+                            <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden z-50">
                                 <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 transition">
                                     <i class="fas fa-user mr-2"></i> Profile
                                 </a>
-                                <a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 transition">
-                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                </a>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-purple-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     {% else %}
@@ -140,9 +143,12 @@
                     <a href="{% url 'profile' %}" class="block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">
                         Profile
                     </a>
-                    <a href="{% url 'logout' %}" class="block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">
-                        Logout
-                    </a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">
+                            Logout
+                        </button>
+                    </form>
                 {% else %}
                     <a href="{% url 'login' %}" class="block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">
                         Login
@@ -183,7 +189,7 @@
                         <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
                             <i class="fas fa-briefcase text-white text-xl"></i>
                         </div>
-                        <span class="text-xl font-bold">JobPortal</span>
+                        <span class="text-xl font-bold">HustleHive</span>
                     </div>
                     <p class="text-gray-400">Connecting talent with opportunities.</p>
                 </div>
@@ -221,7 +227,7 @@
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 JobPortal. All rights reserved.</p>
+                <p>&copy; 2025 HustleHive. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -232,6 +238,21 @@
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         });
+
+        // User menu toggle on click
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userMenu = document.getElementById('user-menu');
+        if (userMenuBtn && userMenu) {
+            userMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userMenu.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (!userMenu.contains(e.target) && !userMenuBtn.contains(e.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        }
     </script>
     
     {% block extra_js %}{% endblock %}

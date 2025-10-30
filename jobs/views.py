@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Job, Application, UserProfile
 from .forms import UserRegistrationForm, JobForm, ApplicationForm, ProfileForm
+from django.views.decorators.http import require_POST
 
 # Home View
 def home(request):
@@ -225,6 +226,27 @@ def job_applications(request, job_id):
         'job': job,
         'applications': applications
     })
+
+# Update application status (Employer only)
+@login_required
+@require_POST
+def update_application_status(request, job_id, application_id, action):
+    job = get_object_or_404(Job, id=job_id, posted_by=request.user)
+    application = get_object_or_404(Application, id=application_id, job=job)
+    action_map = {
+        'accept': 'A',
+        'review': 'R',
+        'decline': 'D',
+    }
+    status_code = action_map.get(action)
+    if not status_code:
+        messages.error(request, 'Invalid action.')
+        return redirect('job_applications', job_id=job.id)
+
+    application.status = status_code
+    application.save(update_fields=['status'])
+    messages.success(request, f"Application marked as {'Accepted' if status_code=='A' else 'Reviewed' if status_code=='R' else 'Declined'}.")
+    return redirect('job_applications', job_id=job.id)
 
 # Profile View
 @login_required
